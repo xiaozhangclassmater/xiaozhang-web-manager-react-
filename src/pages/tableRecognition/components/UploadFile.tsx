@@ -1,10 +1,11 @@
 import { InboxOutlined } from '@ant-design/icons';
-import { Upload, UploadProps } from "antd";
+import { Image, Upload, UploadProps } from "antd";
 import { memo } from 'react';
 import { UploadFileWapper } from './style/uploadFile.ts';
 const { Dragger } = Upload;
 interface UploadFileProps {
-  saveUploadFile: (file: any) => void
+  saveUploadFile: (file: any) => void,
+  imageList: string[]
 }
 const UploadFile = memo((props: UploadFileProps) => {
   // const [fileList, setFileList] = useState<any[]>([])
@@ -16,7 +17,7 @@ const UploadFile = memo((props: UploadFileProps) => {
   }
   return (
     <UploadFileWapper>
-      <Dragger customRequest={customUploadFileHandle}  onChange={uploadFileFinishChange} >
+      <Dragger customRequest={customUploadFileHandle}  onChange={uploadFileFinishChange} multiple >
         <p className="ant-upload-drag-icon">
           <InboxOutlined />
         </p>
@@ -25,6 +26,18 @@ const UploadFile = memo((props: UploadFileProps) => {
           支持拖拽上传
         </p>
       </Dragger>
+      <div className='upload-image-list'>
+        {
+          props.imageList.map((item, index) => {
+            return (
+              <div className='image-item' key={index} >
+                <Image src={item} />
+              </div>
+            )
+          })
+        }
+        
+      </div>
     </UploadFileWapper>
   )
 })

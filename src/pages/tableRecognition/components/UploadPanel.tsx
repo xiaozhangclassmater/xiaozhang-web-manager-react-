@@ -1,7 +1,12 @@
 import { memo } from 'react'
+import { recognizeTableData } from '..'
 import TopcatImage from '../assets/topcat.png'
 import { UploadPanelWapper } from './style/uploadPanel'
-const UploadPanel = memo(() => {
+interface UploadPanelProps {
+  tableData: recognizeTableData[]
+}
+const UploadPanel = memo((props: UploadPanelProps) => {
+  console.log('props', props.tableData);
   return (
     <UploadPanelWapper>
       <div className='panel-image'>

@@ -14,10 +14,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       },
       // 腾讯接口 代理
-      '/yangziInterface': {
-        target: 'http://ocr.tencentcloudapi.com',
+      '/yangziwangApi': {
+        target: 'http://yangstudy.cn:18088',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/tencentApi/, '') 
+        rewrite: (path) => path.replace(/^\/yangziwangApi/, '') 
       }
     }
   },
