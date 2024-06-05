@@ -1,5 +1,6 @@
 import type { UploadFile as UploadFileType } from 'antd';
 import { message, UploadProps } from "antd";
+import axios from 'axios';
 import Md5 from 'md5';
 import React, { useMemo, useState } from "react";
 import BottomPanel from './components/BottomPanel.tsx';
@@ -7,20 +8,20 @@ import TablePanel from './components/TablePanel.tsx';
 import UploadFile from "./components/UploadFile.tsx";
 import UploadPanel from './components/UploadPanel.tsx';
 import { TableRecognitionWapper } from "./style/index";
-// interface NumberkeyMapType<T = string> {
-//   [key: number]: T
-// }
+interface NumberkeyMapType<T = string> {
+  [key: number]: T
+}
 export interface recognizeTableData{
   key: React.Key,
   address: string,
   size: string,
   phone: string
 }
-// interface RecognizeTableRes  {
-//   code: number,
-//   data: NumberkeyMapType<string[]>,
-//   message: string
-// }
+interface RecognizeTableRes  {
+  code: number,
+  data: NumberkeyMapType<string[]>,
+  message: string
+}
 /**
  * 请求识别表格处理函数
  */
@@ -49,85 +50,84 @@ const TableRecognition: React.FC = () => {
       'Content-Type': 'multipart/form-data',
       Authorization: buildAuthorizationField()
     }
-    console.log('he', headers);
     let res = null 
     try {
-      // res = await axios.post<RecognizeTableRes>('/yangziwangApi/image/ocr', formData, { headers })
+      res = await axios.post<RecognizeTableRes>('/yangziwangApi/image/ocr', formData, { headers })
     } catch (error) {
       message.error("网络异常")
     }
-    res = {
-      data: {
-        data: {
-          "11": [
-              "杭州市余杭区东湖街道博宸君府7幢2单元502室",
-              "129.27",
-              "15224080713"
-          ],
-          "12": [
-              "杭州市余杭区东湖街道博宸君府7幢3单元101室",
-              "128.83",
-              "13588859338"
-          ],
-          "0": [
-              "杭州市余杭区东湖街道博宸君府7幢1单元101室",
-              "133.88",
-              "13735506875"
-          ],
-          "1": [
-              "杭州市余杭区东湖街道博宸君府7幢1单元102室",
-              "128.83",
-              "15924111936"
-          ],
-          "2": [
-              "杭州市余杭区东湖街道博宸君府7幢1单元301室",
-              "138.42",
-              "13816119198"
-          ],
-          "3": [
-              "杭州市余杭区东湖街道博宸君府7幢1单元302室",
-              "132.74",
-              "13567247521"
-          ],
-          "4": [
-              "杭州市余杭区东湖街道博宸君府7幢1单元501室",
-              "134.95",
-              "13777593789"
-          ],
-          "5": [
-              "杭州市余杭区东湖街道博宸君府7幢1单元502室",
-              "129.27",
-              "15757138596"
-          ],
-          "6": [
-              "杭州市余杭区东湖街道博宸君府7幢2单元101室",
-              "128.83",
-              "13282134368"
-          ],
-          "7": [
-              "杭州市余杭区东湖街道博宸君府7幢2单元102室",
-              "128.83",
-              "15869118855"
-          ],
-          "8": [
-              "杭州市余杭区东湖街道博宸君府7幢2单元301室",
-              "132.74",
-              "18667127768"
-          ],
-          "9": [
-              "杭州市余杭区东湖街道博宸君府7幢2单元302室",
-              "132.74",
-              "15924100017"
-          ],
-          "10": [
-              "杭州市余杭区东湖街道博宸君府7幢2单元501室",
-              "129.27",
-              "13605717418"
-          ]
-      },
-      code: 200
-    }
-  }
+    // res = {
+    //   data: {
+    //     data: {
+    //       "11": [
+    //           "杭州市余杭区东湖街道博宸君府7幢2单元502室",
+    //           "129.27",
+    //           "15224080713"
+    //       ],
+    //       "12": [
+    //           "杭州市余杭区东湖街道博宸君府7幢3单元101室",
+    //           "128.83",
+    //           "13588859338"
+    //       ],
+    //       "0": [
+    //           "杭州市余杭区东湖街道博宸君府7幢1单元101室",
+    //           "133.88",
+    //           "13735506875"
+    //       ],
+    //       "1": [
+    //           "杭州市余杭区东湖街道博宸君府7幢1单元102室",
+    //           "128.83",
+    //           "15924111936"
+    //       ],
+    //       "2": [
+    //           "杭州市余杭区东湖街道博宸君府7幢1单元301室",
+    //           "138.42",
+    //           "13816119198"
+    //       ],
+    //       "3": [
+    //           "杭州市余杭区东湖街道博宸君府7幢1单元302室",
+    //           "132.74",
+    //           "13567247521"
+    //       ],
+    //       "4": [
+    //           "杭州市余杭区东湖街道博宸君府7幢1单元501室",
+    //           "134.95",
+    //           "13777593789"
+    //       ],
+    //       "5": [
+    //           "杭州市余杭区东湖街道博宸君府7幢1单元502室",
+    //           "129.27",
+    //           "15757138596"
+    //       ],
+    //       "6": [
+    //           "杭州市余杭区东湖街道博宸君府7幢2单元101室",
+    //           "128.83",
+    //           "13282134368"
+    //       ],
+    //       "7": [
+    //           "杭州市余杭区东湖街道博宸君府7幢2单元102室",
+    //           "128.83",
+    //           "15869118855"
+    //       ],
+    //       "8": [
+    //           "杭州市余杭区东湖街道博宸君府7幢2单元301室",
+    //           "132.74",
+    //           "18667127768"
+    //       ],
+    //       "9": [
+    //           "杭州市余杭区东湖街道博宸君府7幢2单元302室",
+    //           "132.74",
+    //           "15924100017"
+    //       ],
+    //       "10": [
+    //           "杭州市余杭区东湖街道博宸君府7幢2单元501室",
+    //           "129.27",
+    //           "13605717418"
+    //       ]
+    //   },
+    //   code: 200
+    // }
+    // }
     const { data: recognizeData, code } = res?.data as any
     if (code === 200 && recognizeData){
       const webCreateFieldMap = ['address', 'size', 'phone']

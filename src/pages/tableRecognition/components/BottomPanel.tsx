@@ -11,6 +11,10 @@ interface BottomPanelProps {
 }
 const BottomPanel = memo((props:BottomPanelProps) => {
   const exportRecognizeTableData = () => {
+    // 没数据的情况下 无法操作
+    if (!props.tableDataSource.length){
+      return
+    }
     exportExcel(props.tableDataSource, '识别数据')
 
   }

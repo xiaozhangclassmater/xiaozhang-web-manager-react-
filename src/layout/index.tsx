@@ -1,9 +1,6 @@
 import {
   DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
+  PieChartOutlined
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu, theme } from "antd";
@@ -33,13 +30,6 @@ function getItem(
 const items: MenuItem[] = [
   getItem("首页", "/dashboard", <PieChartOutlined />),
   getItem("表格识别技术", "/tableRecognition", <DesktopOutlined />),
-  getItem("User", "sub1", <UserOutlined />, [
-    getItem("Tom", "3"),
-    getItem("Bill", "4"),
-    getItem("Alex", "5"),
-  ]),
-  getItem("Team", "sub2", <TeamOutlined />, [getItem("Team 1", "6"), getItem("Team 2", "8")]),
-  getItem("Files", "9", <FileOutlined />),
 ];
 
 const AppLayout: React.FC = () => {

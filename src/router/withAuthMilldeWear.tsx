@@ -9,7 +9,11 @@ const withAuthMilldeWear = memo(({ component }: withAuthMilldeWearProps) => {
   // const location = useLocation();
   // const authWhiteList = ["/login", "/404"];
   nprogress.done();
-  return <>{component}</>;
+  return (
+   <>
+    <>{component}</>
+   </>
+  );
   // if (authWhiteList.includes(location.pathname)) {
   //   return <>{component}</>;
   // } else {
