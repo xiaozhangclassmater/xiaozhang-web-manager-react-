@@ -1,15 +1,17 @@
 import type { UploadFile as UploadFileType } from 'antd';
 import { message, UploadProps } from "antd";
 import Md5 from 'md5';
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import BottomPanel from './components/BottomPanel.tsx';
+import TablePanel from './components/TablePanel.tsx';
 import UploadFile from "./components/UploadFile.tsx";
 import UploadPanel from './components/UploadPanel.tsx';
 import { TableRecognitionWapper } from "./style/index";
-interface NumberkeyMapType<T = string> {
-  [key: number]: T
-}
+// interface NumberkeyMapType<T = string> {
+//   [key: number]: T
+// }
 export interface recognizeTableData{
+  key: React.Key,
   address: string,
   size: string,
   phone: string
@@ -19,7 +21,6 @@ export interface recognizeTableData{
 //   data: NumberkeyMapType<string[]>,
 //   message: string
 // }
-
 /**
  * 请求识别表格处理函数
  */
@@ -30,9 +31,12 @@ const buildAuthorizationField = () => {
 }
 
 const TableRecognition: React.FC = () => {
+  const [ showTablePanel, setShowTablePanel ] = useState(false)
   const [ imageList, setImageList] = useState<string[]>([]) 
   const [ uploadFile, setUploadFile] = useState<UploadFileType[]>()
   const [ recognizeTableData, setRecognizeTableData] = useState<recognizeTableData[]>([])
+  const disabledStartRecognize = useMemo(() => !uploadFile?.length, [uploadFile])
+  const exportDisabled = useMemo(() => !recognizeTableData.length, [recognizeTableData])
   const startOperational = async () => {
     if (!uploadFile?.length){
       return
@@ -126,9 +130,9 @@ const TableRecognition: React.FC = () => {
   }
     const { data: recognizeData, code } = res?.data as any
     if (code === 200 && recognizeData){
-      const webCreateFieldMap:NumberkeyMapType = { 0: 'address', 1: 'size', 2: 'phone' }
+      const webCreateFieldMap = ['address', 'size', 'phone']
       const transformRecognizeData = []
-     
+      let index = 0
       for (const key in recognizeData) {
         const recognizeList = recognizeData[key] as string[]
         const transMap:any = {}
@@ -136,9 +140,12 @@ const TableRecognition: React.FC = () => {
           const key = webCreateFieldMap[i] // 获得一个映射的key 字段
           transMap[key] = recognizeList[i]
         }
-        transformRecognizeData.push(transMap)
+        index = index + 1
+        
+        transformRecognizeData.push({key: index, ...transMap})
       }
       setRecognizeTableData(transformRecognizeData)
+      setShowTablePanel(!!transformRecognizeData.length)
     }
   }
   const saveUploadFile: UploadProps['onChange'] = (info) => {
@@ -160,10 +167,10 @@ const TableRecognition: React.FC = () => {
   }
   return (
     <TableRecognitionWapper className="table-Recognition-wapper">
-      <BottomPanel startOperational={startOperational}/>
+      <BottomPanel tableDataSource={recognizeTableData} disabled={disabledStartRecognize} exportDisabled={exportDisabled} startOperational={startOperational}/>
       <div className="title-wapper">文字提取技术(OCR)</div>
       <UploadFile imageList={imageList}  saveUploadFile={saveUploadFile}/>
-      <UploadPanel tableData={recognizeTableData} />
+      {showTablePanel ? <TablePanel tableDataSource={recognizeTableData}/> : <UploadPanel tableData={recognizeTableData} /> }
     </TableRecognitionWapper>
   )
 };
