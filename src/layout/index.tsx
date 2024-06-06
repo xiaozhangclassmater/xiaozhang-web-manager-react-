@@ -39,6 +39,7 @@ const AppLayout: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
   const jumpTabItemPage = (item: any) => {
     if (locationInstance.pathname === item.key) {
       return;
@@ -76,7 +77,8 @@ const AppLayout: React.FC = () => {
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb> */}
             <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
-              <Outlet />
+                <Outlet />
+              
             </div>
           </Content>
         </Layout>

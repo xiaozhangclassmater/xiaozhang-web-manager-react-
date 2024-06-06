@@ -1,3 +1,5 @@
+import Loading from '@/components/Loading/index.tsx';
+import { useLoading } from '@/hooks';
 import type { UploadFile as UploadFileType } from 'antd';
 import { message, UploadProps } from "antd";
 import axios from 'axios';
@@ -32,6 +34,7 @@ const buildAuthorizationField = () => {
 }
 
 const TableRecognition: React.FC = () => {
+  const { loadingState, setLoadingState } = useLoading()
   const [ showTablePanel, setShowTablePanel ] = useState(false)
   const [ imageList, setImageList] = useState<string[]>([]) 
   const [ uploadFile, setUploadFile] = useState<UploadFileType[]>()
@@ -42,6 +45,7 @@ const TableRecognition: React.FC = () => {
     if (!uploadFile?.length){
       return
     }
+    setLoadingState(true)
     const formData = new FormData()
     for (let i = 0; i < (uploadFile?.length || 0); i++) {
       formData.append('multipartFile', uploadFile[i].originFileObj as File)
@@ -146,6 +150,7 @@ const TableRecognition: React.FC = () => {
       }
       setRecognizeTableData(transformRecognizeData)
       setShowTablePanel(!!transformRecognizeData.length)
+      setLoadingState(false)
     }
   }
   const saveUploadFile: UploadProps['onChange'] = (info) => {
@@ -171,6 +176,7 @@ const TableRecognition: React.FC = () => {
       <div className="title-wapper">文字提取技术(OCR)</div>
       <UploadFile imageList={imageList}  saveUploadFile={saveUploadFile}/>
       {showTablePanel ? <TablePanel tableDataSource={recognizeTableData}/> : <UploadPanel tableData={recognizeTableData} /> }
+       {loadingState && <Loading/>}
     </TableRecognitionWapper>
   )
 };
