@@ -56,7 +56,7 @@ const TableRecognition: React.FC = () => {
     }
     let res = null 
     try {
-      res = await axios.post<RecognizeTableRes>('/yangziwangApi/image/ocr', formData, { headers })
+      res = await axios.post<RecognizeTableRes>('http://yangstudy.cn:18088/image/ocr', formData, { headers })
     } catch (error) {
       message.error("网络异常")
     }

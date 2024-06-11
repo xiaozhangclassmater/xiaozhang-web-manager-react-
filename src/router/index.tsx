@@ -8,7 +8,7 @@ const TableRecognition = lazy(() => import("@/pages/TableRecognition/index"));
 const router: RouteObject[] = [
   {
     path: "/",
-    element: <Navigate to={"/dashboard"} />,
+    element: <Navigate to={"/login"} />,
   },
   {
     path: "/",
