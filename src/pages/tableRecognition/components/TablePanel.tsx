@@ -1,9 +1,10 @@
-import { Table, TableProps } from 'antd';
+import { Table, TableColumnsType, TableProps } from 'antd';
 import { memo } from 'react';
-import { columns, DataType } from '../static';
+import { DataType } from '../static';
 import { TablePanelWapper } from './style/TablePanel';
 interface TablePanelProps {
   tableDataSource: DataType[]
+  columns: TableColumnsType<DataType>
 }
 const TablePanel = memo((props:TablePanelProps) => {
   const changeHandle: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
@@ -11,7 +12,7 @@ const TablePanel = memo((props:TablePanelProps) => {
   };
   return (
     <TablePanelWapper>
-      <Table columns={columns} dataSource={props.tableDataSource} onChange={changeHandle} />
+      <Table columns={props.columns} dataSource={props.tableDataSource} onChange={changeHandle} />
     </TablePanelWapper>
   )
 })

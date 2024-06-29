@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Loading from '@/components/Loading/index.tsx';
 import { useLoading } from '@/hooks';
 import type { UploadFile as UploadFileType } from 'antd';
@@ -19,6 +20,7 @@ export interface recognizeTableData{
   size: string,
   phone: string
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface RecognizeTableRes  {
   code: number,
   data: NumberkeyMapType<string[]>,
@@ -32,8 +34,15 @@ const buildAuthorizationField = () => {
   const todayTime = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`
   return Md5(`zqy-yzw${todayTime}`)
 }
-
+interface responseType {
+    code: number,
+    data: {
+      [k: number]: string[]
+    },
+    message: string
+}
 const TableRecognition: React.FC = () => {
+  const [ columns, setColumns] = useState<any>([])
   const { loadingState, setLoadingState } = useLoading()
   const [ showTablePanel, setShowTablePanel ] = useState(false)
   const [ imageList, setImageList] = useState<string[]>([]) 
@@ -60,6 +69,7 @@ const TableRecognition: React.FC = () => {
     } catch (error) {
       message.error("网络异常")
     }
+    console.log('res', res);
     // res = {
     //   data: {
     //     data: {
@@ -134,7 +144,18 @@ const TableRecognition: React.FC = () => {
     // }
     const { data: recognizeData, code } = res?.data as any
     if (code === 200 && recognizeData){
-      const webCreateFieldMap = ['address', 'size', 'phone']
+      const maxDataFieldLen = recognizeData[0].length
+      const webCreateFieldMap = []
+      const tempColumns = []
+      for (let i = 0; i < maxDataFieldLen; i++) {
+        const onlyField = `Field${i + 1}`
+        tempColumns.push({
+          title: onlyField,
+          dataIndex: onlyField
+        })
+        webCreateFieldMap.push(onlyField)
+      }
+      setColumns(tempColumns)
       const transformRecognizeData = []
       let index = 0
       for (const key in recognizeData) {
@@ -147,6 +168,7 @@ const TableRecognition: React.FC = () => {
         index = index + 1
         
         transformRecognizeData.push({key: index, ...transMap})
+        console.log('transformRecognizeData', transformRecognizeData);
       }
       setRecognizeTableData(transformRecognizeData)
       setShowTablePanel(!!transformRecognizeData.length)
@@ -175,7 +197,7 @@ const TableRecognition: React.FC = () => {
       <BottomPanel tableDataSource={recognizeTableData} disabled={disabledStartRecognize} exportDisabled={exportDisabled} startOperational={startOperational}/>
       <div className="title-wapper">文字提取技术(OCR)</div>
       <UploadFile imageList={imageList}  saveUploadFile={saveUploadFile}/>
-      {showTablePanel ? <TablePanel tableDataSource={recognizeTableData}/> : <UploadPanel tableData={recognizeTableData} /> }
+      {showTablePanel ? <TablePanel  columns={columns} tableDataSource={recognizeTableData}/> : <UploadPanel tableData={recognizeTableData} /> }
        {loadingState && <Loading/>}
     </TableRecognitionWapper>
   )

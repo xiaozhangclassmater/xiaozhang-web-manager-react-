@@ -1,14 +1,11 @@
 import { TableColumnsType } from "antd";
 export interface DataType {
   key: React.Key;
-  address: string;
-  size: string;
-  phone: string;
 }
 export const columns: TableColumnsType<DataType> = [
   {
     title: '地址(address)',
-    dataIndex: 'address',
+    dataIndex: 'Field1',
     width: '30%',
   },
   {
