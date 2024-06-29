@@ -142,7 +142,7 @@ const TableRecognition: React.FC = () => {
     //   code: 200
     // }
     // }
-    const { data: recognizeData, code } = res?.data as any
+    const { data: recognizeData, code } = res?.data as responseType
     if (code === 200 && recognizeData){
       const maxDataFieldLen = recognizeData[0].length
       const webCreateFieldMap = []
